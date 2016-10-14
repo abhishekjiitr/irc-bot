@@ -13,6 +13,7 @@ make necessary edits in the settings.ini file and then run
 make run
 ```
 # testing
+analyze code coverage report in your browser
 ```
 make cov
 ```
