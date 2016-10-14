@@ -24,37 +24,39 @@ class TalkBackBot(irc.IRCClient):
 		if self.nickname != self.factory.nickname:
 			log.msg('Your nickname was already occupied, actual nickname is '
                 '"{}".'.format(self.nickname))
-   		self.join()
+   		self.join(self.factory.channel)
 
 	def joined(self, channel):
 		"""Called when the bot joins the channel """
 		log.msg("[{nick} has joined {channel}]".format(nick=self.nickname, channel=self.factory.channel,))
 
 	def privmsg(self, user, channel, msg):
-		# Sample response = :Macha!~macha@unaffiliated/macha PRIVMSG #botwar :Test response
-		"""Called when the bot receives a message"""
-		sendTo = None
-		prefix = ''
-		senderNick = user.split('!', 1)[0]
-		if channel == self.nickname:
-			# /MSG back
-			sendTo = channel
-		elif msg.startswith(self.nickname):
-			# Reply back on the channel
-			sendTo = channel
-			prefix = senderNick + ": "
-		else:
-			msg = msg.lower()
-			for trigger in self.factory.triggers:
-				if msg in trigger:
-					sendTo = channel
-					prefix = senderNick + ": "
-					break
-		if sendTo:
-			quote = self.factory.quotes.pick()
-			self.msg(sendTo, prefix+quote)
-			log.msg("sent message to {receiver}, triggered by {sender}:\n\t{quote}".format(receiver=sendTo, sender=senderNick, quote=quote))
+	    """Called when the bot receives a message."""
+	    sendTo = None
+	    prefix = ''
+	    senderNick = user.split('!', 1)[0]
+	    if channel == self.nickname:
+	        # /MSG back
+	        sendTo = senderNick
+	    elif msg.startswith(self.nickname):
+	        # Reply back on the channel
+	        sendTo = channel
+	        prefix = senderNick + ': '
+	    else:
+	        msg = msg.lower()
+	        for trigger in self.factory.triggers:
+	            if msg in trigger:
+	                sendTo = channel
+	                prefix = senderNick + ': '
+	                break
 
+	    if sendTo:
+	        quote = self.factory.quotes.pick()
+	        self.msg(sendTo, prefix + quote)
+	        log.msg(
+	            "sent message to {receiver}, triggered by {sender}:\n\t{quote}"
+	            .format(receiver=sendTo, sender=senderNick, quote=quote)
+	        )
 
 class TalkBackBotFactory(protocol.ClientFactory):
 	# instantiate the Talkback IRC protocol

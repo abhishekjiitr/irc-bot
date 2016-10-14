@@ -15,8 +15,8 @@ class TestQuotePicker(unittest.TestCase):
 	)
 
 	def test_pick(self):
-		picker = QuotePicker(os.path.dirname(__file__), "test_quotes.txt")
+		picker = QuotePicker(
+		            os.path.join(os.path.dirname(__file__), "test_quotes.txt")
+		        )
 		quote = picker.pick()
 		self.assertIn(quote, (self.QUOTE1, self.QUOTE2), "Got unexpected quote: '%s'" % (quote))
-testquotepicker = TestQuotePicker()
-testquotepicker.test_pick()
