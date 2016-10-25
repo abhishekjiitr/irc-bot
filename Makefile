@@ -6,4 +6,3 @@ cov:
 	coverage report
 	coverage html
 	google-chrome htmlcov/index.html
-.PHONY: run cov

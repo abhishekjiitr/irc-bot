@@ -45,7 +45,7 @@ class TalkBackBot(irc.IRCClient):
 	    else:
 	        msg = msg.lower()
 	        for trigger in self.factory.triggers:
-	            if msg in trigger:
+	            if trigger in msg:
 	                sendTo = channel
 	                prefix = senderNick + ': '
 	                break
